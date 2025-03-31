@@ -13,6 +13,7 @@ KERNEL_OFFSET equ 0x1000
 
     call load_kernel
     call switch_to_pm
+    jmp $
 
 
 %include "boot_sect_print.asm"
@@ -32,7 +33,7 @@ load_kernel:
     mov es, ax
     mov bx, 0x0000
 
-    mov dh, 2
+    mov dh, 16
     mov dl, [BOOT_DRIVE]
 
     call disk_load
@@ -47,7 +48,8 @@ load_kernel:
 BEGIN_PM:
     mov ebx, MSG_PROT_MODE
     call print_string_pm
-    jmp dword KERNEL_OFFSET
+    call KERNEL_OFFSET
+    jmp $
 
 
 
