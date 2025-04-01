@@ -31,11 +31,14 @@ $(BUILD_DIR)/ports.o: drivers/ports.c drivers/ports.h
 $(BUILD_DIR)/screen.o: drivers/screen.c drivers/screen.h drivers/ports.h
 	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c drivers/screen.c -o $(BUILD_DIR)/screen.o
 
+$(BUILD_DIR)/util.o: kernel/util.c kernel/util.h
+	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c kernel/util.c -o $(BUILD_DIR)/util.o
+
 # Link Kernel
-$(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o
+$(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/util.o
 	$(LD) -m elf_i386 -Ttext 0x1000 --oformat binary $^ -o $(BUILD_DIR)/kernel.bin
 
-$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o
+$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/util.o
 	$(LD) -m elf_i386 -Ttext 0x1000 $^ -o $(BUILD_DIR)/kernel.elf
 
 # Create OS Image

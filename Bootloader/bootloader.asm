@@ -33,7 +33,7 @@ load_kernel:
     mov es, ax
     mov bx, 0x0000
 
-    mov dh, 16
+    mov dh, 20
     mov dl, [BOOT_DRIVE]
 
     call disk_load
@@ -46,6 +46,7 @@ load_kernel:
 
 [BITS 32]
 BEGIN_PM:
+
     mov ebx, MSG_PROT_MODE
     call print_string_pm
     call KERNEL_OFFSET

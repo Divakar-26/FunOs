@@ -2,6 +2,7 @@
     "files.associations": {
         "stdio.h": "c",
         "screen.h": "c",
-        "ports.h": "c"
+        "ports.h": "c",
+        "util.h": "c"
     }
 }
