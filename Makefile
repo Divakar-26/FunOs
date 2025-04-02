@@ -42,15 +42,22 @@ $(BUILD_DIR)/idt.o: cpu/idt.c cpu/idt.h cpu/types.h
 $(BUILD_DIR)/isr.o: cpu/isr.c cpu/isr.h cpu/idt.h drivers/screen.h kernel/util.h
 	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c cpu/isr.c -o $(BUILD_DIR)/isr.o
 
+$(BUILD_DIR)/timer.o: cpu/timer.c cpu/timer.h 
+	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c cpu/timer.c -o $(BUILD_DIR)/timer.o
+
+$(BUILD_DIR)/keyboard.o: drivers/keyboard.c drivers/keyboard.h 
+	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c drivers/keyboard.c -o $(BUILD_DIR)/keyboard.o
+
+
 
 $(BUILD_DIR)/interrupt.o: cpu/interrupt.asm
 	$(AS) -f elf cpu/interrupt.asm -o $(BUILD_DIR)/interrupt.o
 
 # Link Kernel
-$(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/util.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/isr.o 
+$(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/util.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/isr.o   $(BUILD_DIR)/timer.o  $(BUILD_DIR)/keyboard.o  
 	$(LD) -m elf_i386 -Ttext 0x1000 --oformat binary $^ -o $(BUILD_DIR)/kernel.bin
 
-$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/util.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/isr.o 
+$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/ports.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/util.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/isr.o  $(BUILD_DIR)/timer.o  $(BUILD_DIR)/keyboard.o  
 	$(LD) -m elf_i386 -Ttext 0x1000 $^ -o $(BUILD_DIR)/kernel.elf
 
 # Create OS Image

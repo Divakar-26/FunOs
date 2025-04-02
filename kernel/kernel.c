@@ -19,6 +19,8 @@
 #include"util.h"
 #include"../cpu/isr.h"
 #include"../cpu/idt.h"
+#include"../cpu/timer.h"
+#include"../drivers/keyboard.h"
 // #define VIDEO_ADDRESS 0xA0000
 // void draw_pixel(int x, int y, unsigned char color) {
 //     unsigned char *video_memory = (unsigned char*)VIDEO_ADDRESS;
@@ -35,8 +37,9 @@ void main() {
     clear_screen();
     isr_install();
     /* Test the interrupts */
-    __asm__ __volatile__("int $2");
-    __asm__ __volatile__("int $3");
+    __asm__ volatile("sti");
+    // init_timer(1);
+    init_keyboard();
 
 
 }

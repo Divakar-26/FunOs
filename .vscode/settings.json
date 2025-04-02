@@ -4,6 +4,7 @@
         "screen.h": "c",
         "ports.h": "c",
         "util.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "isr.h": "c"
     }
 }
