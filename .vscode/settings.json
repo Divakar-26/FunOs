@@ -3,6 +3,7 @@
         "stdio.h": "c",
         "screen.h": "c",
         "ports.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "types.h": "c"
     }
 }
