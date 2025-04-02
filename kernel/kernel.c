@@ -16,6 +16,9 @@
 // }
 
 #include "../drivers/screen.h"
+#include"util.h"
+#include"../cpu/isr.h"
+#include"../cpu/idt.h"
 // #define VIDEO_ADDRESS 0xA0000
 // void draw_pixel(int x, int y, unsigned char color) {
 //     unsigned char *video_memory = (unsigned char*)VIDEO_ADDRESS;
@@ -26,11 +29,14 @@
 //     // Set the pixel color at the computed offset
 //     video_memory[offset] = color;
 // }
+
+
 void main() {
     clear_screen();
-
-    kprint_at("This text forces the kernel to scroll. Row 0 will disappear. And with this text, the kernel will scroll again, and row 1 will disappear too", 60, 24);
-    kprint("And with this text, the kernel will scroll again, and row 1 will disappear too!");
+    isr_install();
+    /* Test the interrupts */
+    __asm__ __volatile__("int $2");
+    __asm__ __volatile__("int $3");
 
 
 }
