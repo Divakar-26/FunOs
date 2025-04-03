@@ -2,7 +2,7 @@
 #define KEYBOARD_H
 
 #include "../cpu/types.h"
-#include"../kernel/util.h"
+#include"../libc/util.h"
 
 void init_keyboard();
 

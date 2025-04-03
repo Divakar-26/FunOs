@@ -1,6 +1,6 @@
 #include "screen.h"
-#include "ports.h"
-#include"../kernel/util.h"
+#include "../cpu/ports.h"
+#include"../libc/util.h"
 
 //private functions
 

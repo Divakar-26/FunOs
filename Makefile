@@ -20,26 +20,26 @@ $(BUILD_DIR)/kernel_entry.o: kernel/kernel_entry.asm
 	$(AS) -f elf kernel/kernel_entry.asm -o $(BUILD_DIR)/kernel_entry.o
 
 # Kernel (C)
-$(BUILD_DIR)/kernel.o: kernel/kernel.c drivers/screen.h drivers/ports.h
+$(BUILD_DIR)/kernel.o: kernel/kernel.c drivers/screen.h cpu/ports.h
 	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c kernel/kernel.c -o $(BUILD_DIR)/kernel.o
 
 # Ports (C)
-$(BUILD_DIR)/ports.o: drivers/ports.c drivers/ports.h
-	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c drivers/ports.c -o $(BUILD_DIR)/ports.o
+$(BUILD_DIR)/ports.o: cpu/ports.c cpu/ports.h
+	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c cpu/ports.c -o $(BUILD_DIR)/ports.o
 
 # Screen (C)
-$(BUILD_DIR)/screen.o: drivers/screen.c drivers/screen.h drivers/ports.h
+$(BUILD_DIR)/screen.o: drivers/screen.c drivers/screen.h cpu/ports.h
 	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c drivers/screen.c -o $(BUILD_DIR)/screen.o
 
 #UTILS (C)
-$(BUILD_DIR)/util.o: kernel/util.c kernel/util.h
-	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c kernel/util.c -o $(BUILD_DIR)/util.o
+$(BUILD_DIR)/util.o: libc/util.c libc/util.h
+	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c libc/util.c -o $(BUILD_DIR)/util.o
 
 $(BUILD_DIR)/idt.o: cpu/idt.c cpu/idt.h cpu/types.h
 	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c cpu/idt.c -o $(BUILD_DIR)/idt.o
 
 # ISR (C)
-$(BUILD_DIR)/isr.o: cpu/isr.c cpu/isr.h cpu/idt.h drivers/screen.h kernel/util.h
+$(BUILD_DIR)/isr.o: cpu/isr.c cpu/isr.h cpu/idt.h drivers/screen.h libc/util.h
 	$(CC) -m32 -ffreestanding -fno-pic -fno-stack-protector -nostdlib -g -c cpu/isr.c -o $(BUILD_DIR)/isr.o
 
 $(BUILD_DIR)/timer.o: cpu/timer.c cpu/timer.h 

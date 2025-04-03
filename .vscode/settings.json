@@ -5,6 +5,7 @@
         "ports.h": "c",
         "util.h": "c",
         "types.h": "c",
-        "isr.h": "c"
+        "isr.h": "c",
+        "keyboard.h": "c"
     }
 }

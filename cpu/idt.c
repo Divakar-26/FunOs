@@ -1,5 +1,5 @@
 #include"idt.h"
-#include"../kernel/util.h"
+#include"../libc/util.h"
 
 idt_gate_t idt[IDT_ENTRIES];  // This is the global IDT table
 idt_register_t idt_reg;       // This is the global IDT register
