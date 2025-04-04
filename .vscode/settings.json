@@ -6,6 +6,9 @@
         "util.h": "c",
         "types.h": "c",
         "isr.h": "c",
-        "keyboard.h": "c"
+        "keyboard.h": "c",
+        "stdint.h": "c",
+        "font8x8.h": "c",
+        "timer.h": "c"
     }
 }

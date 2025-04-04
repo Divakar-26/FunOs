@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "../cpu/ports.h"
 #include"../libc/util.h"
+#include"../libc/font.h"
 
 //private functions
 
@@ -109,7 +110,7 @@ void kprint_at(char * message, int col, int row){
 }
 
 void kprint(char * message){
-    kprint_at(message, -1, -1);
+    printString(message);
 }
 
 

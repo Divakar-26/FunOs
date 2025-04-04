@@ -15,6 +15,7 @@
 //     print_string(message);
 // }
 
+
 #include "../drivers/screen.h"
 #include"../libc/util.h"
 #include"../cpu/isr.h"
@@ -22,31 +23,17 @@
 #include"../cpu/timer.h"
 #include"../drivers/keyboard.h"
 #include"../cpu/ports.h"
+#include <stdint.h>
 // #define VIDEO_ADDRESS 0xA0000
 // void draw_pixel(int x, int y, unsigned char color) {
-//     unsigned char *video_memory = (unsigned char*)VIDEO_ADDRESS;
-    
-//     // Calculate the pixel offset
-//     int offset = (y * 320) + x;  // 320 is the screen width in pixels
-    
-//     // Set the pixel color at the computed offset
-//     video_memory[offset] = color;
-// }
+
 
 
 void main() {
-
-    // set_video_mode_13h();
-
-    // for(int i = 0; i < 100; i++){
-    //     draw_pixel(0, i, 255);
-    // }
-    clear_screen();
     isr_install();
-    // /* Test the interrupts */
     __asm__ volatile("sti");
-    // // init_timer(1);
     init_keyboard();
 
-
+    while (1);
 }
+

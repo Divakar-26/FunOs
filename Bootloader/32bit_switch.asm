@@ -2,6 +2,10 @@
 switch_to_pm:
     cli        ; 1 diable interupts
 
+    mov ah, 0x00
+    mov al, 0x13    ; Mode 13h
+    int 0x10
+
     mov si, switchingMsg
     call print  ; Print this BEFORE switching
 
