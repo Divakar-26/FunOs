@@ -20,5 +20,7 @@ void clear_screen_graphics();
 void incCursorY();
 void incCursorX();
 void scroll_screen();
+void printBackspace();
+void drawCursor();
 
 #endif

@@ -50,7 +50,7 @@ $(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o $(OBJ)
 # Create OS Image
 $(BUILD_DIR)/os-image.img: $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kernel.bin
 	dd if=/dev/zero of=$@ bs=512 count=2880
-	dd if=$(BUILD_DIR)/bootloader.bin of=$@ conv=notrunc
+	dd if=$(BUILD_DIR)/bootloader.bin of=$@ seek=0 conv=notrunc
 	dd if=$(BUILD_DIR)/kernel.bin of=$@ seek=1 conv=notrunc
 
 # Run in QEMU
@@ -59,7 +59,7 @@ run: all
 
 # Debug with GDB
 debug: all
-	qemu-system-i386 -s -S -drive format=raw,file=$(BUILD_DIR)/os-image.img & 
+	qemu-system-i386 -s -S -drive format=raw,file=$(BUILD_DIR)/os-image.img & \
 	$(GDB) $(BUILD_DIR)/kernel.elf -ex "target remote localhost:1234"
 
 # Clean Build Files

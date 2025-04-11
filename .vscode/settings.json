@@ -9,6 +9,13 @@
         "keyboard.h": "c",
         "stdint.h": "c",
         "font8x8.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "font.h": "c",
+        "*.tcc": "c",
+        "string": "c",
+        "__string": "c",
+        "locale": "c",
+        "idt.h": "c",
+        "string.h": "c"
     }
 }

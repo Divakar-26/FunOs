@@ -24,6 +24,8 @@
 #include"../drivers/keyboard.h"
 #include"../cpu/ports.h"
 #include <stdint.h>
+#include"../libc/string.h"
+#include"kernel.h"
 // #define VIDEO_ADDRESS 0xA0000
 // void draw_pixel(int x, int y, unsigned char color) {
 
@@ -31,9 +33,17 @@
 
 void main() {
     isr_install();
-    __asm__ volatile("sti");
-    init_keyboard();
-
-    while (1);
+    irq_install();
+    kprint("Type something\n"
+        "Type SHUTDOWN to halt the CPU\n> ");
 }
 
+void user_input(char *input) {
+    if (strcmp(input, "SHUTDOWN") == 0) {
+        kprint("Stopping the CPU. Bye!\n");
+        asm volatile("hlt");
+    }
+    kprint("You said: ");
+    kprint(input);
+    kprint("\n> ");
+}

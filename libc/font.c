@@ -23,6 +23,9 @@ typedef enum {
 
 int cursorX = 0;
 int cursorY = 0;
+int prevCursorX = 0;
+int prevCursorY = 0;
+
 
 void drawPixel(int x, int y, int color){
     VGA[y * SCREEN_WIDTH + x] = color;
@@ -45,8 +48,7 @@ void draw_char(int x, int y, char c, uint8_t color) {
                 drawPixel(x + col, y + row, color);
             }   
         }
-    }
-    
+    }   
 }
 
 void printString(char * s){
@@ -75,6 +77,8 @@ void printString(char * s){
         draw_char(cursorX, cursorY, s[i], COLOR_WHITE);
         cursorX += CHAR_WIDTH;
     }
+
+    drawCursor();
 }
 
 
@@ -82,7 +86,36 @@ void printString_at(int x, int y, char * s){
     cursorX = x;
     cursorY = y;
     printString(s);
-    
+}
+
+void printString_color(char * s, uint8_t color){
+    for(int i = 0; s[i] != '\0'; i++){
+        if (s[i] == '\n') {
+            cursorX = 0;
+            cursorY += CHAR_HEIGHT;
+
+            // Scroll if we go beyond screen height
+            if (cursorY + CHAR_HEIGHT > SCREEN_HEIGHT) {
+                scroll_screen();
+            }
+
+            continue;  // skip drawing this character
+        }
+
+        if (cursorX + CHAR_WIDTH > SCREEN_WIDTH) {
+            cursorX = 0;
+            cursorY += CHAR_HEIGHT;
+        }
+
+        if (cursorY + CHAR_HEIGHT > SCREEN_HEIGHT) {
+            scroll_screen();
+        }
+
+        draw_char(cursorX, cursorY, s[i], color);
+        cursorX += CHAR_WIDTH;
+    }
+
+    drawCursor();
 }
 
 void clear_screen_graphics(){
@@ -115,3 +148,29 @@ void scroll_screen() {
 void incCursorY(){cursorY++;}
 void incCursorX(){cursorX++;}
 
+void printBackspace(){
+    if (cursorX == 0) {
+        if (cursorY == 0) return;  // Already at top-left, do nothing
+        cursorY -= CHAR_HEIGHT;
+        cursorX = SCREEN_WIDTH - CHAR_WIDTH;
+    } else {
+        cursorX -= CHAR_WIDTH;
+    }
+
+    // Overwrite character with a black rectangle (erase)
+    drawRectangle(cursorX, cursorY, CHAR_WIDTH, CHAR_HEIGHT, COLOR_BLACK);
+    drawCursor();
+}
+
+
+void drawCursor(){
+    // Erase old cursor
+    drawRectangle(prevCursorX, prevCursorY + CHAR_HEIGHT, CHAR_WIDTH, 2, COLOR_BLACK);
+
+    // Draw new cursor (as underline at the bottom of character cell)
+    drawRectangle(cursorX, cursorY + CHAR_HEIGHT, CHAR_WIDTH, 2, COLOR_WHITE);
+
+    // Save current cursor position for next erase
+    prevCursorX = cursorX;
+    prevCursorY = cursorY;
+}
