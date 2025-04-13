@@ -16,7 +16,6 @@ void drawPixel(int x, int y, int color);
 void drawRectangle(int x, int y, int w, int h, int color);
 void draw_char(int x, int y, char c, uint8_t color);
 void printString(char * s);
-void clear_screen_graphics();
 void incCursorY();
 void incCursorX();
 void scroll_screen();

@@ -76,7 +76,10 @@ void printString(char *s)
             continue; // skip drawing this character
         }
 
-        if (cursorX + CHAR_WIDTH >= SCREEN_WIDTH)
+        draw_char(cursorX, cursorY, s[i], COLOR_WHITE);
+        cursorX += CHAR_WIDTH;
+
+        if (cursorX + CHAR_WIDTH > SCREEN_WIDTH)
         {
             cursorX = 0;
             cursorY += CHAR_HEIGHT;
@@ -86,9 +89,6 @@ void printString(char *s)
                 scroll_screen();
             }
         }
-
-        draw_char(cursorX, cursorY, s[i], COLOR_WHITE);
-        cursorX += CHAR_WIDTH;
     }
     drawCursor();
 }
@@ -111,7 +111,10 @@ void printStringColor(char *s, uint8_t color)
             continue; // skip drawing this character
         }
 
-        if (cursorX + CHAR_WIDTH >= SCREEN_WIDTH - 1)
+        draw_char(cursorX, cursorY, s[i], color);
+        cursorX += CHAR_WIDTH;
+
+        if (cursorX + CHAR_WIDTH > SCREEN_WIDTH)
         {
             cursorX = 0;
             cursorY += CHAR_HEIGHT;
@@ -121,10 +124,6 @@ void printStringColor(char *s, uint8_t color)
                 scroll_screen();
             }
         }
-
-
-        draw_char(cursorX, cursorY, s[i], color);
-        cursorX += CHAR_WIDTH;
     }
 
     drawCursor();
@@ -209,4 +208,6 @@ void clear_screenGraphics()
 
     cursorX = 0;
     cursorY = 0;
+
+    printStringColor(">", 0x0A);
 }

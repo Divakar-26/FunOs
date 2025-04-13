@@ -18,7 +18,8 @@ int print_char(char c, int col, int row, char attr);
 
 void clear_screen();
 void kprint_at(char * message, int col, int row);
-void kprint(char * message);
+void kprint(const char * message);
 void kprint_backspace();
 void kprint_color(char * s, uint8_t color);
+
 #endif

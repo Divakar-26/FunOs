@@ -17,6 +17,7 @@
         "locale": "c",
         "idt.h": "c",
         "string.h": "c",
-        "function.h": "c"
+        "function.h": "c",
+        "sstream": "c"
     }
 }

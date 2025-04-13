@@ -7,5 +7,7 @@
 #include"../cpu/ports.h"
 
 void init_timer(u32 freq);
+u32 timer_get_ticks();
+u32 timer_get_uptime();
 
 #endif

@@ -141,6 +141,7 @@ void irq_handler(registers_t r) {
         isr_t handler = interrupt_handlers[r.int_no];
         handler(r);
     }
+
 }
 
 void irq_install() {

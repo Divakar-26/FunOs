@@ -18,8 +18,8 @@ void kprint_at(char * message, int col, int row){
 
 }
 
-void kprint(char * message){
-    printString(message);
+void kprint(const char * message){
+    printString((char *)(message));
 }
 
 void kprint_backspace(){

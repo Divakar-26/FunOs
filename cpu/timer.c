@@ -1,9 +1,10 @@
 #include"timer.h"
 #include "isr.h"
 #include"../libc/function.h"
+#include "../drivers/screen.h"
 
 u32 tick = 0;
-
+u32 last_second_tick = 0;
 static void timer_callback(registers_t regs){
     tick++;
     UNUSED(regs);
@@ -21,4 +22,14 @@ void init_timer(u32 freq) {
     port_byte_out(0x43, 0x36); /* Command port */
     port_byte_out(0x40, low);
     port_byte_out(0x40, high);
+
+
+}
+
+u32 timer_get_ticks(){
+    return tick;
+}
+
+u32 timer_get_uptime(){
+    return tick / 50;
 }
