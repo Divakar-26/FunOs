@@ -1,3 +1,4 @@
+#include<stdint.h>
 #ifndef SCREEN_H
 #define SCREEN_H
 
@@ -12,16 +13,12 @@
 #define REG_SCREEN_DATA 0x3d5
 
 //function which should be private
-int get_cursor_offset();
-void set_cursor_offset(int offset);
 int print_char(char c, int col, int row, char attr);
-int get_offset(int col, int row);
-int get_offset_row(int offset);
-int get_offset_col(int offset);
+
 
 void clear_screen();
 void kprint_at(char * message, int col, int row);
 void kprint(char * message);
 void kprint_backspace();
-
+void kprint_color(char * s, uint8_t color);
 #endif

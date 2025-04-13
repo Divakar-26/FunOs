@@ -4,7 +4,7 @@
 KERNEL_OFFSET equ 0x1000
 
     mov [BOOT_DRIVE], dl
-    mov bp, 0x9000
+    mov bp, 0x8000
     mov sp, bp
 
     mov si, message
@@ -54,11 +54,11 @@ BEGIN_PM:
 
 
 
-MSG_PROT_MODE db "32 BIT MODE", 0
+MSG_PROT_MODE db "", 0
 loadingMessage db "Loading kernel...", 0
 message db "B..", 0
-successMessage db "Kernel Loaded succesfully", 0
-errorMessage db "Error loading kernel!", 0
+successMessage db "Kernel Loaded", 0
+errorMessage db "''", 0
 
 
 BOOT_DRIVE db 0         ;store boot drive number

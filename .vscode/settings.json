@@ -16,6 +16,7 @@
         "__string": "c",
         "locale": "c",
         "idt.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "function.h": "c"
     }
 }

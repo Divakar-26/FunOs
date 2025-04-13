@@ -22,5 +22,7 @@ void incCursorX();
 void scroll_screen();
 void printBackspace();
 void drawCursor();
+void printStringColor(char * s, uint8_t color);
+void clear_screenGraphics();
 
 #endif

@@ -1,7 +1,10 @@
 [BITS 16]
-[ORG 0x9000]
+[ORG 0x0000]
 
 second_stage:
+    mov ax, 0x8000
+    mov ds, ax
+
     mov si, secondMessage
     call print
 
