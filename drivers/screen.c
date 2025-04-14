@@ -1,7 +1,7 @@
 #include "screen.h"
 
 #include "../cpu/ports.h"
-#include"../libc/util.h"
+#include"../libc/mem.h"
 #include"../libc/font.h"
 
 

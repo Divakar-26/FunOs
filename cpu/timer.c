@@ -7,6 +7,7 @@ u32 tick = 0;
 u32 last_second_tick = 0;
 static void timer_callback(registers_t regs){
     tick++;
+    // kprint("T");  // Tiny debug print to confirm it's firing
     UNUSED(regs);
 }
 
@@ -30,6 +31,20 @@ u32 timer_get_ticks(){
     return tick;
 }
 
-u32 timer_get_uptime(){
-    return tick / 50;
+void timer_delay(u32 time_in_seconds) {
+    u32 start_ticks = tick;  // Store the current tick count when delay starts
+    u32 ticks_required = time_in_seconds * 50;  // Convert time to ticks (50 ticks per second)
+
+    // Periodically check if enough ticks have passed
+    asm volatile("sti");
+    while ((tick - start_ticks) < ticks_required) {
+        // Yield to the CPU, allowing other tasks to run (you can implement a 'yield' here)
+        // Optionally, you can use `__asm__("hlt");` to put the CPU in a halt state temporarily
+        // to save power, but ensure interrupts can still occur.
+        asm volatile("hlt");
+        // asm volatile("sti");
+    }
+    // Once the required ticks have passed, return from the function
+
 }
+

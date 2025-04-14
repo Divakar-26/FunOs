@@ -13,6 +13,7 @@ int strcmp(char s1[], const char s2[]);
 char *my_strchr(const char *str, char c);
 void u32_to_str(u32 value, char* str);
 void remove_leading_spaces(char *str);
+int string_to_int(char * str);
 
 
 #endif

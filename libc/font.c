@@ -208,6 +208,4 @@ void clear_screenGraphics()
 
     cursorX = 0;
     cursorY = 0;
-
-    printStringColor(">", 0x0A);
 }

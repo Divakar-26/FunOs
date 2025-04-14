@@ -1,8 +1,9 @@
 #include "shell.h"
 #include "../drivers/screen.h"
 #include "../libc/string.h"
-#include "../libc/util.h"
+#include "../libc/mem.h"
 #include "kernel.h"
+#include"../cpu/timer.h"
 
 
 #define MAX_COMMANDS 10
@@ -29,11 +30,32 @@ void help_command(char *args) {
     kprint("  HELP - Displays this message\n");
 }
 
+void delay_command(char * args){
+    // timer_delay(500);
+
+    int timeInSec = string_to_int(args);
+
+    timer_delay((u32)timeInSec);
+
+    u32 ticks = timer_get_ticks();
+    char *time; u32_to_str(ticks, time);
+    kprint(time);
+    kprint("\n");
+}
+
+void show_tick_command(){
+    u32 ticks = timer_get_ticks();
+    char *time; u32_to_str(ticks, time);
+    kprint(time);
+    kprint("\n");
+}
 
 Command command_registry[MAX_COMMANDS] = {
     {"shutdown", shutdown_command},
     {"clear", clear_command},
-    {"help", help_command}
+    {"help", help_command},
+    {"timer", delay_command},
+    {"showTick", show_tick_command}
 };
 
 void shell_input(char * input){

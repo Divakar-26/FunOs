@@ -18,6 +18,8 @@
         "idt.h": "c",
         "string.h": "c",
         "function.h": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "mem.h": "c",
+        "shell.h": "c"
     }
 }

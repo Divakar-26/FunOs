@@ -65,3 +65,6 @@ debug: all
 # Clean Build Files
 clean:
 	rm -rf $(BUILD_DIR)
+
+full:
+	qemu-system-x86_64 -drive file=build/os-image.img -display sdl,full-screen=on

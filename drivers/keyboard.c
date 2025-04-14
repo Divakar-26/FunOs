@@ -114,6 +114,18 @@ static void keyboard_callback(registers_t regs)
     // Handle normal key press
     if (scancode == BACKSPACE)
     {
+        if(ctrl_pressed){
+            if(key_buffer[0] != '\0'){
+                int len = strlen(key_buffer);
+                while(len > 0 && key_buffer[len - 1] != ' '){
+                    key_buffer[len-1] = '\0';
+                    len--;
+                    kprint_backspace();
+                }
+
+                key_buffer[len] = '\0';
+            }
+        }
         if(key_buffer[0] == '\0'){
             return;
         }
@@ -147,9 +159,8 @@ static void keyboard_callback(registers_t regs)
             }
             if(letter == 'L' || letter == 'l'){
 
-                clear_screenGraphics();
-
-
+                char * clear = "clear";
+                user_input(clear);
                 return;
             }
         }

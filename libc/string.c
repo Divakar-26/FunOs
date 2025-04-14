@@ -110,3 +110,29 @@ char *my_strchr(const char *str, char c) {
     // If character was not found, return NULL
     return NULL;
 }
+
+int string_to_int(char * str){
+    int result = 0;
+    int sign = 1;
+
+    // Check for negative numbers
+    if (*str == '-') {
+        sign = -1;
+        str++;  // Move past the minus sign
+    }
+
+    // Process each character in the string
+    while (*str != '\0') {
+        if (*str < '0' || *str > '9') {
+            // Handle invalid characters (optional)
+            return 0;  // Or handle error appropriately
+        }
+
+        // Update the result by shifting previous digits and adding the new digit
+        result = result * 10 + (*str - '0');
+        str++;  // Move to the next character
+    }
+
+    return result * sign;  // Apply the sign to the result
+
+}

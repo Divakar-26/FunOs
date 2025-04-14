@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "../drivers/screen.h"
-#include"../libc/util.h"
+#include"../libc/mem.h"
 #include"../cpu/isr.h"
 #include"../cpu/idt.h"
 #include"../cpu/timer.h"
@@ -19,6 +19,8 @@ void main() {
 
     isr_install();
     irq_install();
+    init_timer(50);
+    asm volatile("sti");
     kprint("Type something\n"
         "Type SHUTDOWN to halt the CPU");
     kprint_color("\n>", 0x0A);
