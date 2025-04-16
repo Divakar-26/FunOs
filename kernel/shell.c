@@ -4,6 +4,8 @@
 #include "../libc/mem.h"
 #include "kernel.h"
 #include"../cpu/timer.h"
+#include "../cpu/beep.h"
+#include"../libc/graphics.h"
 
 
 #define MAX_COMMANDS 10
@@ -21,6 +23,7 @@ void shutdown_command(char *args) {
 }
 
 void clear_command(char *args) {
+
     clear_screen();
 }
 void help_command(char *args) {
@@ -28,10 +31,18 @@ void help_command(char *args) {
     kprint("  SHUTDOWN - Stops the CPU\n");
     kprint("  CLEAR - Clears the screen\n");
     kprint("  HELP - Displays this message\n");
+    kprint("  TIMER arg1 - Starts a timer for arg1 seconds\n");
+    kprint("  WHOAMI - Information of OS\n");
 }
 
 void delay_command(char * args){
     // timer_delay(500);
+
+    if(strcmp(args, " ") == 0){
+        kprint("Not a valid number");
+        kprint("\n");
+        return;
+    }
 
     int timeInSec = string_to_int(args);
 
@@ -41,6 +52,7 @@ void delay_command(char * args){
     char *time; u32_to_str(ticks, time);
     kprint(time);
     kprint("\n");
+
 }
 
 void show_tick_command(){
@@ -50,12 +62,19 @@ void show_tick_command(){
     kprint("\n");
 }
 
+void whoami_command(){
+    kprint("  ----byteViewOs----\n");
+    kprint("                DU\n");
+    kprint("\n");
+}
+
 Command command_registry[MAX_COMMANDS] = {
     {"shutdown", shutdown_command},
     {"clear", clear_command},
     {"help", help_command},
     {"timer", delay_command},
-    {"showTick", show_tick_command}
+    {"showTick", show_tick_command},
+    {"whoami", whoami_command}
 };
 
 void shell_input(char * input){

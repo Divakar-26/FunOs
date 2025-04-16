@@ -20,6 +20,8 @@
         "function.h": "c",
         "sstream": "c",
         "mem.h": "c",
-        "shell.h": "c"
+        "shell.h": "c",
+        "beep.h": "c",
+        "graphics.h": "c"
     }
 }

@@ -6,7 +6,6 @@
 
 
 void clear_screen() {
-
     clear_screenGraphics();
 }
 

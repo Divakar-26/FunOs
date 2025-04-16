@@ -55,7 +55,7 @@ $(BUILD_DIR)/os-image.img: $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kernel.bin
 
 # Run in QEMU
 run: all
-	qemu-system-i386 -drive format=raw,file=$(BUILD_DIR)/os-image.img
+	qemu-system-i386 -drive format=raw,file=$(BUILD_DIR)/os-image.img -machine pc -audiodev pa,id=snd0 -device sb16,audiodev=snd0
 
 # Debug with GDB
 debug: all
@@ -67,4 +67,4 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 full:
-	qemu-system-x86_64 -drive file=build/os-image.img -display sdl,full-screen=on
+	qemu-system-i386 -drive file=build/os-image.img -display sdl,full-screen=on -machine pc -audiodev id=snd0,driver=pa -device sb16,audiodev=snd0

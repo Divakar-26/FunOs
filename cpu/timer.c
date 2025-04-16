@@ -33,7 +33,7 @@ u32 timer_get_ticks(){
 
 void timer_delay(u32 time_in_seconds) {
     u32 start_ticks = tick;  // Store the current tick count when delay starts
-    u32 ticks_required = time_in_seconds * 50;  // Convert time to ticks (50 ticks per second)
+    u32 ticks_required = (time_in_seconds + 19) / 20;  // Convert time to ticks (50 ticks per second)
 
     // Periodically check if enough ticks have passed
     asm volatile("sti");

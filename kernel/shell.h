@@ -8,4 +8,7 @@ void clear_command(char *args); // Clears the screen
 void help_command(char *args); // Displays help message
 void delay_command(char * args);
 void show_tick_command();
+void whoami_command();
+
+
 #endif // SHELL_H

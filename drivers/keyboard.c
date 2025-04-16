@@ -56,6 +56,8 @@ void print_letter(u8 scancode)
 
 static void keyboard_callback(registers_t regs)
 {
+
+    
     u8 scancode = port_byte_in(0x60);
 
     // Handle key release
