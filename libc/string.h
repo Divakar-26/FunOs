@@ -15,5 +15,7 @@ void u32_to_str(u32 value, char* str);
 void remove_leading_spaces(char *str);
 int string_to_int(char * str);
 void toLower(char * str);
+void hex_to_ascii(int n, char str[]);
+
 
 #endif

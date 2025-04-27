@@ -35,7 +35,17 @@ void help_command(char *args)
 
 void delay_command(char *args)
 {
-    
+    u32 phys_addr;
+    u32 page = kmalloc(1000, 1, &phys_addr);
+    char page_str[16] = "";
+    hex_to_ascii(page, page_str);
+    char phys_str[16] = "";
+    hex_to_ascii(phys_addr, phys_str);
+    kprint("Page: ");
+    kprint(page_str);
+    kprint(", physical address: ");
+    kprint(phys_str);
+    kprint("\n");
 }
 
 void show_tick_command()
@@ -74,7 +84,7 @@ Command command_registry[MAX_COMMANDS] = {
     {"shutdown", shutdown_command},
     {"clear", clear_command},
     {"help", help_command},
-    {"TIMER", delay_command},
+    {"timer", delay_command},
     {"showTick", show_tick_command},
     {"echo", echo_color_command}
 };
