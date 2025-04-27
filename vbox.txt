@@ -1,2 +1,2 @@
 VBoxManage convertfromraw build/os-image.img build/os-image.vdi --format VDI
-qemu-system-x86_64 -drive file=build/os-image.img -display sdl,full-screen=on -soundhw pcspk
+qemu-system-x86_64 -drive file=build/os-image.img -display sdl,full-screen=on

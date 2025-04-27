@@ -33,7 +33,7 @@ u32 timer_get_ticks(){
 
 void timer_delay(u32 time_in_seconds) {
     u32 start_ticks = tick;  // Store the current tick count when delay starts
-    u32 ticks_required = (time_in_seconds + 19) / 20;  // Convert time to ticks (50 ticks per second)
+    u32 ticks_required = (time_in_seconds * 50) / 1000;  // Convert time to ticks (50 ticks per second)
 
     // Periodically check if enough ticks have passed
     asm volatile("sti");
@@ -41,7 +41,7 @@ void timer_delay(u32 time_in_seconds) {
         // Yield to the CPU, allowing other tasks to run (you can implement a 'yield' here)
         // Optionally, you can use `__asm__("hlt");` to put the CPU in a halt state temporarily
         // to save power, but ensure interrupts can still occur.
-        asm volatile("hlt");
+        // asm volatile("hlt");
         // asm volatile("sti");
     }
     // Once the required ticks have passed, return from the function

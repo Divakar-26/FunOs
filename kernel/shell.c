@@ -3,68 +3,70 @@
 #include "../libc/string.h"
 #include "../libc/mem.h"
 #include "kernel.h"
-#include"../cpu/timer.h"
-#include "../cpu/beep.h"
-#include"../libc/graphics.h"
+#include "../cpu/timer.h"
 
 
 #define MAX_COMMANDS 10
 
-
-typedef struct {
+typedef struct
+{
     const char *name;
     void (*function)(char *args);
 } Command;
 
-
-void shutdown_command(char *args) {
+void shutdown_command(char *args)
+{
     kprint("Stopping the CPU. Bye!\n");
     asm volatile("hlt");
 }
 
-void clear_command(char *args) {
-
-    clear_screen();
+void clear_command(char *args)
+{
+    clear_screen();   
 }
-void help_command(char *args) {
+
+void help_command(char *args)
+{
     kprint("Available commands:\n");
     kprint("  SHUTDOWN - Stops the CPU\n");
     kprint("  CLEAR - Clears the screen\n");
     kprint("  HELP - Displays this message\n");
-    kprint("  TIMER arg1 - Starts a timer for arg1 seconds\n");
-    kprint("  WHOAMI - Information of OS\n");
 }
 
-void delay_command(char * args){
-    // timer_delay(500);
+void delay_command(char *args)
+{
+    
+}
 
-    if(strcmp(args, " ") == 0){
-        kprint("Not a valid number");
-        kprint("\n");
-        return;
+void show_tick_command()
+{
+    u32 tick = timer_get_ticks();   
+    char * tickInString;
+    u32_to_str(tick, tickInString);
+    kprint(tickInString);
+    kprint("\n");
+}
+
+void echo_color_command(char *args){
+    char color[20];
+    char argument[200];
+    int i = 0;
+    while (args[i] != ' ' && args[i] != '\0') {
+        color[i] = args[i];
+        i++;
     }
+    color[i] = '\0';
+    i++;
+    int j = 0;
+    while(args[i] != '\0'){
+        argument[j] = args[i];
+        j++;
+        i++; 
+    }
+    // j++;
+    argument[j] = '\0';
 
-    int timeInSec = string_to_int(args);
-
-    timer_delay((u32)timeInSec);
-
-    u32 ticks = timer_get_ticks();
-    char *time; u32_to_str(ticks, time);
-    kprint(time);
-    kprint("\n");
-
-}
-
-void show_tick_command(){
-    u32 ticks = timer_get_ticks();
-    char *time; u32_to_str(ticks, time);
-    kprint(time);
-    kprint("\n");
-}
-
-void whoami_command(){
-    kprint("  ----byteViewOs----\n");
-    kprint("                DU\n");
+    kprint_color(argument, color);
     kprint("\n");
 }
 
@@ -72,22 +74,25 @@ Command command_registry[MAX_COMMANDS] = {
     {"shutdown", shutdown_command},
     {"clear", clear_command},
     {"help", help_command},
-    {"timer", delay_command},
+    {"TIMER", delay_command},
     {"showTick", show_tick_command},
-    {"whoami", whoami_command}
+    {"echo", echo_color_command}
 };
 
-void shell_input(char * input){
+void shell_input(char *input)
+{
 
     char input2[256];
     int i = 0;
     // Skip leading zeros
-    while (input[i] == ' ') {
-        i++;  // Skip over leading zeros
+    while (input[i] == ' ')
+    {
+        i++; // Skip over leading zeros
     }
 
     int j = 0; // Index for the input2 buffer
-    while (input[i] != '\0' && j < 255) {
+    while (input[i] != '\0' && j < 255)
+    {
         input2[j] = input[i];
         i++;
         j++;
@@ -97,15 +102,18 @@ void shell_input(char * input){
 
     // Now check the command
     char *args = my_strchr(input2, ' ');
-    if (args != NULL) {
-        *args = '\0';  // Null terminate command
-        args++;        // Move pointer past the space
+    if (args != NULL)
+    {
+        *args = '\0'; // Null terminate command
+        args++;       // Move pointer past the space
     }
 
-    for (int i = 0; i < MAX_COMMANDS; i++) {
-        if (strcmp(input2, command_registry[i].name) == 0) {
+    for (int i = 0; i < MAX_COMMANDS; i++)
+    {
+        if (strcmp(input2, command_registry[i].name) == 0)
+        {
             command_registry[i].function(args);
-            kprint_color(">", 0x0A); // Prompt again after executing command
+            kprint_color(">", "GREEN"); // Prompt again after executing command
             return;
         }
     }
@@ -113,9 +121,7 @@ void shell_input(char * input){
     // kprint("You said: ");
     // kprint(input);
 
-
-    kprint("Unknown command: ");
     kprint(input2);
-    kprint("\n");
-    kprint_color(">", 0x0A); // Prompt again
+    kprint(": Command not found");
+    kprint_color("\n>", "GREEN");
 }

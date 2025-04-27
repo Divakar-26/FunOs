@@ -33,9 +33,8 @@ load_kernel:
     mov es, ax
     mov bx, 0x0000
 
-    mov dh, 53
+    mov dh, 50
     mov dl, [BOOT_DRIVE]
-    
 
     call disk_load
 

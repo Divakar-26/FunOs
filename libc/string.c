@@ -136,3 +136,14 @@ int string_to_int(char * str){
     return result * sign;  // Apply the sign to the result
 
 }
+
+void toLower(char * str){
+    int i= 0;
+    while(str[i]!='\0'){
+        char c = str[i];
+        if(c >= 'A' && c <= 'Z'){
+            str[i] = str[i] + 32;
+        }
+        i++;
+    }    
+}

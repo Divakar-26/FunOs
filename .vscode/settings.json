@@ -1,27 +1,15 @@
 {
     "files.associations": {
-        "stdio.h": "c",
-        "screen.h": "c",
-        "ports.h": "c",
-        "util.h": "c",
-        "types.h": "c",
-        "isr.h": "c",
-        "keyboard.h": "c",
         "stdint.h": "c",
-        "font8x8.h": "c",
-        "timer.h": "c",
-        "font.h": "c",
-        "*.tcc": "c",
-        "string": "c",
-        "__string": "c",
-        "locale": "c",
-        "idt.h": "c",
+        "graphics.h": "c",
+        "kernel.h": "c",
+        "keyboard.h": "c",
+        "ports.h": "c",
+        "screen.h": "c",
+        "types.h": "c",
         "string.h": "c",
         "function.h": "c",
-        "sstream": "c",
-        "mem.h": "c",
-        "shell.h": "c",
-        "beep.h": "c",
-        "graphics.h": "c"
+        "__node_handle": "c",
+        "shell.h": "c"
     }
 }

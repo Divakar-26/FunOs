@@ -3,17 +3,17 @@
 #include "../cpu/isr.h"
 #include "screen.h"
 #include "../libc/string.h"
+#include "../libc/mem.h"
 #include "../libc/function.h"
 #include "../kernel/kernel.h"
-#include "../libc/font.h"
 
+#define KEYBOARD_DATA_PORT 0x60
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
-static char key_buffer[256];
 
-static bool prompt_printed = false;
-bool shift_pressed = false;
-bool ctrl_pressed = false;
+static char key_buffer[256];
+static int shift = 0;
+static int ctrl_pressed = 0;
 
 #define SC_MAX 57
 const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
@@ -24,152 +24,84 @@ const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
                          "/", "RShift", "Keypad *", "LAlt", "Spacebar"};
 const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          '7', '8', '9', '0', '-', '=', '?', '?', 'q', 'w', 'e', 'r', 't', 'y',
-                         'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',   
+                         'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
                          'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
                          'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '};
-
-const char sc_ascii_shifted[] = {
-    '?', '?', '!', '@', '#', '$', '%', '^', '&', '*',
-    '(', ')', '_', '+', '?', '\t', 'Q', 'W', 'E', 'R',
-    'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n', '?',
-    'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':',
-    '"', '~', '?', '|', 'Z', 'X', 'C', 'V', 'B', 'N',
-    'M', '<', '>', '?', '?', '*', '?', ' ' 
-};
-
-void print_letter(u8 scancode)
-{
-    if (scancode <= SC_MAX)
-    {
-        kprint(sc_name[scancode]);
-    }
-    else if (scancode <= SC_MAX + 0x80)
-    {
-        kprint("key up ");
-        print_letter(scancode - 0x80); // Recursively call for readable key
-    }
-    else
-    {
-        kprint("Unknown key");
-    }
-}
+const char sc_ascii_shifted[] = {'?', '?', '!', '@', '#', '$', '%', '^',
+                                 '&', '*', '(', ')', '_', '+', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
+                                 'U', 'I', 'O', 'P', '{', '}', '?', '?', 'A', 'S', 'D', 'F', 'G',
+                                 'H', 'J', 'K', 'L', ':', '"', '~', '?', '|', 'Z', 'X', 'C', 'V',
+                                 'B', 'N', 'M', '<', '>', '?', '?', '?', '?', ' '};
 
 static void keyboard_callback(registers_t regs)
 {
-
-    
     u8 scancode = port_byte_in(0x60);
 
-    // Handle key release
     if (scancode & 0x80)
     {
-        u8 key = scancode & 0x7F; // Remove release bit
-
-        if (key == 0x2A || key == 0x36)
-        { // LShift or RShift
-            shift_pressed = false;
+        u8 real_scancode = scancode & 0x7F;
+        if (real_scancode == 0x2A || real_scancode == 0x36)
+        {
+            // shift key up
+            // kprint("SHIFT UP");
+            shift = 0;
         }
-        else if (key == 0x1D)
+        else if (real_scancode == 0x1D)
         { // LCtrl
-            ctrl_pressed = false;
+            ctrl_pressed = 0;
+            // kprint("CTRL RELEASED");
         }
 
-        // Don't print anything on key release
         return;
-    }
-
-    // Handle key press
-    if (scancode == 0x2A || scancode == 0x36)
-    { // LShift or RShift
-        shift_pressed = true;
-        return;
-    }
-
-    if (scancode == 0x1D)
-    { // LCtrl
-        ctrl_pressed = true;
-        return;
-    }
-
-    if(scancode == 0x48){
-        kprint("UP ");
-        return;
-    }
-    else if(scancode == 0x50){
-        kprint("DOWN ");
-        return;
-    }
-    else if(scancode == 0x4B){
-        kprint("LEFT ");
-        return;
-    }
-    else if(scancode == 0x4D){
-        kprint("RIGHT ");
-        return;
-    }
-
-    if(scancode == 0x0F){
-        kprint("    ");
-        return;
-    }
-
-    // Handle normal key press
-    if (scancode == BACKSPACE)
-    {
-        if(ctrl_pressed){
-            if(key_buffer[0] != '\0'){
-                int len = strlen(key_buffer);
-                while(len > 0 && key_buffer[len - 1] != ' '){
-                    key_buffer[len-1] = '\0';
-                    len--;
-                    kprint_backspace();
-                }
-
-                key_buffer[len] = '\0';
-            }
-        }
-        if(key_buffer[0] == '\0'){
-            return;
-        }
-        kprint_backspace();
-        backspace(key_buffer);
-        
-    }
-    else if (scancode == ENTER)
-    {
-        kprint("\n");
-        user_input(key_buffer);
-        key_buffer[0] = '\0';
     }
     else
     {
-        char letter = shift_pressed ? sc_ascii_shifted[scancode] : sc_ascii[scancode];
-
-        if (ctrl_pressed)
+        if (scancode == 0x2A || scancode == 0x36)
         {
-            if (letter == 'C' || letter == 'c')
+            // shift key DOWN
+            // kprint("SHIFT");
+            shift = 1;
+            return;
+        }
+        else if (scancode == 0x1D)
+        { // LCtrl
+            // kprint("CTRL");
+            ctrl_pressed = 1;
+            return;
+        }
+        if (scancode == BACKSPACE)
+        {
+            if (strlen(key_buffer) > 0)
             {
-                kprint("Ctrl + C pressed (copy)\n");
-                // Implement your copy logic
-                return;
-            }
-            if (letter == 'V' || letter == 'v')
-            {
-                kprint("Ctrl + V pressed (paste)\n");
-                // Implement your paste logic
-                return;
-            }
-            if(letter == 'L' || letter == 'l'){
-
-                char * clear = "clear";
-                user_input(clear);
-                return;
+                backspace(key_buffer);
+                kprint_backspace();
             }
         }
 
-        char str[2] = {letter, '\0'};
-        append(key_buffer, letter);
-        kprint(str);
+        else if (scancode == ENTER)
+        {
+            kprint("\n");
+            user_input(key_buffer);
+            // key_buffer[0] = '\0';
+            memory_set(key_buffer, 0, sizeof(key_buffer));
+        }
+
+        else
+        {
+            char letter;
+            if (shift)
+            {
+                letter = sc_ascii_shifted[(int)scancode];
+            }
+            else
+            {
+                letter = sc_ascii[(int)scancode];
+            }
+            /* Remember that kprint only accepts char[] */
+            char str[2] = {letter, '\0'};
+            append(key_buffer, letter);
+            kprint(str);
+        }
     }
     UNUSED(regs);
 }
