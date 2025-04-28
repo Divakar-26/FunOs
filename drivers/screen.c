@@ -148,6 +148,10 @@ int get_color_from_string(char * color){
     if(strcmp(color, "blue") == 0 ) return BLUE_ON_BLACK;
     if(strcmp(color, "cyan") == 0 ) return CYAN_ON_BLACK;
     if(strcmp(color, "yellow") == 0 ) return YELLOW_ON_BLACK;
+    if(strcmp(color, "brown") == 0 ) return BROWN_ON_BLACK;
+    if(strcmp(color, "magenta") == 0 ) return MAGENTA_ON_BLACK;
+    if(strcmp(color, "lightblue") == 0 ) return LIGHTBLUE_ON_BLACK;
+    if(strcmp(color, "lightgreen") == 0 ) return LIGHTGREEN_ON_BLACK;
 
     return WHITE_ON_BLACK;
 }

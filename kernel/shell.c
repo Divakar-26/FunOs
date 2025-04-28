@@ -57,25 +57,36 @@ void show_tick_command()
     kprint("\n");
 }
 
-void echo_color_command(char *args){
-    char color[20];
-    char argument[200];
+void echo_color_command(char *args) {
+    char color[20] = "white"; // Default to white
+    char argument[200] = "";
     int i = 0;
-    while (args[i] != ' ' && args[i] != '\0') {
-        color[i] = args[i];
-        i++;
+
+    // Parse flags
+    if (args[i] == '-') {
+        i++; // skip '-'
+        if (args[i] == 'c' && (args[i+1] == ' ' || args[i+1] == '\0')) {
+            i += 2; // Skip 'c' and space
+            int j = 0;
+            // Get the color name
+            while (args[i] != ' ' && args[i] != '\0') {
+                color[j++] = args[i++];
+            }
+            color[j] = '\0';
+        }
     }
-    color[i] = '\0';
-    i++;
+
+    // Skip spaces before the actual message
+    while (args[i] == ' ') i++;
+
+    // Copy remaining args as the message
     int j = 0;
-    while(args[i] != '\0'){
-        argument[j] = args[i];
-        j++;
-        i++; 
+    while (args[i] != '\0') {
+        argument[j++] = args[i++];
     }
-    // j++;
     argument[j] = '\0';
 
+    // Now print the message with the given color
     kprint_color(argument, color);
     kprint("\n");
 }
