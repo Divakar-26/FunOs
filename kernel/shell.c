@@ -5,7 +5,6 @@
 #include "kernel.h"
 #include "../cpu/timer.h"
 
-
 #define MAX_COMMANDS 10
 
 typedef struct

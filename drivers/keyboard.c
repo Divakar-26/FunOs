@@ -15,6 +15,10 @@ static char key_buffer[256];
 static int shift = 0;
 static int ctrl_pressed = 0;
 
+char * prevCommand[256];
+int i =0;
+int totalCommand;
+
 #define SC_MAX 57
 const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
                          "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
@@ -69,6 +73,51 @@ static void keyboard_callback(registers_t regs)
             ctrl_pressed = 1;
             return;
         }
+        if (ctrl_pressed && scancode == BACKSPACE) {
+            int size = strlen(key_buffer);
+            if (size == 0) return;
+            size--; 
+            while (size > 0 && key_buffer[size] != ' ') {
+                key_buffer[size] = '\0';
+                size--;
+                kprint_backspace(); 
+            }
+            key_buffer[size] = '\0'; 
+            kprint_backspace(); 
+            return;
+        }
+        if (scancode == 0x48) { 
+            if (i > 0) {
+                i--;
+                while (strlen(key_buffer) > 0) {
+                    backspace(key_buffer);
+                    kprint_backspace();
+                }
+                strcpy(key_buffer, prevCommand[i]);
+                kprint(key_buffer);
+            }
+            return;
+        }
+        if (scancode == 0x50) { 
+            if (i < totalCommand - 1) {
+                i++; 
+                while (strlen(key_buffer) > 0) {
+                    backspace(key_buffer);
+                    kprint_backspace();
+                }
+                strcpy(key_buffer, prevCommand[i]);
+                kprint(key_buffer);
+            } else if (i == totalCommand - 1) {
+                i++;
+                while (strlen(key_buffer) > 0) {
+                    backspace(key_buffer);
+                    kprint_backspace();
+                }
+                memory_set(key_buffer, 0, sizeof(key_buffer));
+            }
+            return;
+        }
+        
         if (scancode == BACKSPACE)
         {
             if (strlen(key_buffer) > 0)
@@ -83,9 +132,11 @@ static void keyboard_callback(registers_t regs)
             kprint("\n");
             user_input(key_buffer);
             // key_buffer[0] = '\0';
+            prevCommand[i] = strdup(key_buffer); // allocate and copy
+            i++;
+            totalCommand = i;
             memory_set(key_buffer, 0, sizeof(key_buffer));
         }
-
         else
         {
             char letter;

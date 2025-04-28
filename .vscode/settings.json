@@ -12,6 +12,7 @@
         "__node_handle": "c",
         "shell.h": "c",
         "mem.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "cstring": "c"
     }
 }

@@ -2,6 +2,7 @@
 #define STRINGS_H
 
 #include"../cpu/types.h"
+#include"mem.h"
 #include <stddef.h> // For NULL
 
 void int_to_ascii(int n, char str[]);
@@ -16,6 +17,6 @@ void remove_leading_spaces(char *str);
 int string_to_int(char * str);
 void toLower(char * str);
 void hex_to_ascii(int n, char str[]);
-
-
+char* strdup(const char* src);
+void strcpy(char * dest, const char * src);
 #endif

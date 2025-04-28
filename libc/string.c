@@ -167,3 +167,21 @@ void hex_to_ascii(int n, char str[]) {
     if (tmp >= 0xA) append(str, tmp - 0xA + 'a');
     else append(str, tmp + '0');
 }
+
+char* strdup(const char* src) {
+    int len = strlen(src);
+    char* dst = (char*) kmalloc(len + 1, 0, 0); // allocate memory (your kernel malloc)
+    if (dst) {
+        strcpy(dst, src);
+    }
+    return dst;
+}
+
+void strcpy(char *dest, const char *src) {
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
+}
